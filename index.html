@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot Growth Number · Major Arcana</title>
+  <meta name="description" content="Discover your Major Arcana growth card by entering your birthdate." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(160deg, #f5f0e8 0%, #eef2fb 50%, #f5f0e8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 16px 80px;
+    }
+
+    /* ── HEADER ── */
+    .tarot-header {
+      width: 100%;
+      max-width: 680px;
+      text-align: center;
+      padding: 72px 0 40px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #b8982a;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 600;
+      color: #1a2340;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    h1 span {
+      font-style: italic;
+      color: #b8982a;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #556;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 auto 40px;
+      width: 200px;
+      color: #c8a84b;
+      font-size: 18px;
+    }
+
+    .ornament::before,
+    .ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c8a84b);
+    }
+
+    .ornament::after {
+      background: linear-gradient(90deg, #c8a84b, transparent);
+    }
+
+    /* ── INPUT CARD ── */
+    .input-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 28px;
+      padding: 40px 40px 36px;
+      box-shadow: 0 8px 40px rgba(26, 35, 64, .10), 0 2px 8px rgba(26, 35, 64, .06);
+      margin-bottom: 32px;
+    }
+
+    /* ── SOUL CARD SECONDARY ── */
+    .soul-section {
+      border-top: 1px solid rgba(200, 168, 75, 0.2);
+      margin-top: 28px;
+      padding-top: 28px;
+    }
+
+    .soul-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .soul-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #253060, #1a2340);
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #c8a84b;
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(26, 35, 64, .3);
+    }
+
+    .soul-title-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .soul-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #c8a84b;
+      margin-bottom: 3px;
+    }
+
+    .soul-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a2340;
+    }
+
+    .soul-roman {
+      font-size: 12px;
+      color: #8890aa;
+      margin-left: 6px;
+    }
+
+    .soul-text {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #2c3554;
+      border-left: 2px solid #c8a84b;
+      padding-left: 14px;
+      margin-bottom: 14px;
+    }
+
+    .triple-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #f9f4e8, #f3ecd8);
+      border: 1px solid #e0c97a;
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8a6a10;
+      margin-bottom: 18px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #8890aa;
+      margin-bottom: 12px;
+    }
+
+    .date-input {
+      width: 100%;
+      padding: 16px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      color: #1a2340;
+      background: #f3f5fb;
+      border: 1.5px solid transparent;
+      border-radius: 16px;
+      outline: none;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .date-input:focus {
+      border-color: #c8a84b;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(200, 168, 75, .15);
+    }
+
+    .date-input::-webkit-calendar-picker-indicator {
+      opacity: .5;
+      cursor: pointer;
+    }
+
+    .calc-btn {
+      margin-top: 24px;
+      width: 100%;
+      padding: 18px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      color: #fff;
+      background: linear-gradient(135deg, #c8a84b 0%, #a07820 100%);
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s, opacity .18s;
+      box-shadow: 0 4px 20px rgba(160, 120, 32, .35);
+    }
+
+    .calc-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(160, 120, 32, .42);
+    }
+
+    .calc-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .calc-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .error-msg {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #c0392b;
+      text-align: center;
+    }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, .95);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 16px 60px rgba(26, 35, 64, .14), 0 2px 8px rgba(26, 35, 64, .06);
+      animation: slideUp .45s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(32px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-banner {
+      background: linear-gradient(135deg, #1a2340 0%, #253060 100%);
+      padding: 36px 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(200, 168, 75, .25), transparent 65%);
+      pointer-events: none;
+    }
+
+    .number-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c8a84b, #e6c96a);
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 600;
+      color: #1a2340;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 24px rgba(200, 168, 75, .55);
+    }
+
+    .arcana-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .arcana-roman {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #c8a84b;
+    }
+
+    .result-body {
+      padding: 32px 40px 36px;
+    }
+
+    .calc-trail {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #8890aa;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+
+    .trail-chip {
+      background: #f0f3fa;
+      border-radius: 100px;
+      padding: 5px 12px;
+      font-weight: 500;
+      color: #556;
+    }
+
+    .trail-chip.final {
+      background: #1a2340;
+      color: #c8a84b;
+      font-weight: 700;
+    }
+
+    .trail-arrow {
+      color: #c8a84b;
+      font-size: 16px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #c8a84b;
+      margin-bottom: 12px;
+    }
+
+    .interpretation {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #2c3554;
+      font-weight: 400;
+      border-left: 3px solid #c8a84b;
+      padding-left: 16px;
+    }
+
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .kw-chip {
+      font-size: 12px;
+      font-weight: 500;
+      color: #1a2340;
+      background: linear-gradient(135deg, #f9f4e8, #f3ecd8);
+      border: 1px solid #e0c97a;
+      border-radius: 100px;
+      padding: 5px 14px;
+    }
+
+    .reset-btn {
+      display: block;
+      margin: 28px auto 0;
+      padding: 12px 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      color: #8890aa;
+      background: transparent;
+      border: 1.5px solid #dde0ea;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: color .2s, border-color .2s;
+    }
+
+    .reset-btn:hover {
+      color: #1a2340;
+      border-color: #1a2340;
+    }
+
+    /* ── MASTER NUMBER ── */
+    .master-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(200, 168, 75, .25), rgba(200, 168, 75, .10));
+      border: 1px solid rgba(200, 168, 75, .5);
+      border-radius: 100px;
+      padding: 5px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #e6c96a;
+      margin-bottom: 16px;
+    }
+
+    .master-desc {
+      font-size: 13px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.72);
+      max-width: 340px;
+      margin: 10px auto 0;
+      font-style: italic;
+    }
+
+    .soul-master-notice {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: linear-gradient(135deg, #f9f4e8, #f3ecd8);
+      border: 1px solid #e0c97a;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: #5a3e00;
+    }
+
+    .soul-master-notice .icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="tarot-header">
+    <div class="eyebrow">메이저 아르카나 · 소울카드</div>
+    <h1>나의<br /><span>타로 소울카드</span></h1>
+    <p class="subtitle">생년월일을 입력하면 퍼스낼리티 카드와 소울카드를<br />발견할 수 있습니다.</p>
+  </header>
+
+  <div class="ornament">✦</div>
+
+  <!-- INPUT CARD -->
+  <div class="input-card">
+    <label class="input-label" for="birthdate">생년월일</label>
+    <input id="birthdate" class="date-input" type="date" max="" oninput="onDateChange(this)" />
+    <button id="calc-btn" class="calc-btn" disabled onclick="calculate()">
+      소울카드 확인하기 ✦
+    </button>
+    <p id="error-msg" class="error-msg hidden"></p>
+  </div>
+
+  <!-- RESULT CARD (initially hidden) -->
+  <div id="result-card" class="result-card hidden">
+    <!-- 퍼스낼리티 카드 배너 -->
+    <div class="result-banner">
+      <div
+        style="font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:#c8a84b;margin-bottom:12px;">
+        퍼스낼리티 카드</div>
+      <div id="master-badge" class="master-badge hidden">✶ 마스터 넘버</div>
+      <div id="number-badge" class="number-badge">?</div>
+      <div id="arcana-name" class="arcana-name">—</div>
+      <div id="arcana-roman" class="arcana-roman">— · Major Arcana</div>
+      <p id="master-desc" class="master-desc hidden"></p>
+    </div>
+    <div class="result-body">
+      <!-- 계산 과정 -->
+      <div id="calc-trail" class="calc-trail"></div>
+      <!-- 퍼스낼리티 해석 -->
+      <div class="section-label">퍼스낼리티 카드 해석</div>
+      <p id="interpretation" class="interpretation"></p>
+      <div id="keywords" class="keywords"></div>
+
+      <!-- 소울카드 섹션 -->
+      <div id="soul-section" class="soul-section hidden">
+        <div id="triple-notice" class="triple-badge hidden">✦ 3개의 탄생 카드를 가진 특별한 영혼</div>
+        <div class="soul-header">
+          <div id="soul-badge" class="soul-badge">?</div>
+          <div class="soul-title-block">
+            <div class="soul-label">소울카드</div>
+            <div>
+              <span id="soul-name" class="soul-name">—</span>
+              <span id="soul-roman" class="soul-roman">—</span>
+            </div>
+          </div>
+        </div>
+        <div id="soul-master-notice" class="soul-master-notice hidden">
+          <span class="icon">✶</span>
+          <span id="soul-master-text"></span>
+        </div>
+        <p id="soul-text" class="soul-text"></p>
+        <div id="soul-keywords" class="keywords"></div>
+      </div>
+
+      <button class="reset-btn" onclick="resetAll()">← 다시 계산하기</button>
+    </div>
+  </div>
+
+  <script>
+    // ── 오늘 날짜를 max로 설정 ──
+    document.getElementById('birthdate').max = new Date().toISOString().split('T')[0];
+
+    function onDateChange(input) {
+      document.getElementById('calc-btn').disabled = !input.value;
+      document.getElementById('error-msg').classList.add('hidden');
+    }
+
+    // ──────────────────────────────────────────
+    // 소울카드 표준 계산법 (마스터 넘버: 11, 22, 33)
+    // 1. 월 + 일 + 연도(4자리) 를 각각 더함
+    // 2. 합이 22 초과이면 자릿수 합산 감소
+    //    단, 11 / 22 / 33 은 마스터 넘버로 중단
+    // 3. 퍼스낼리티 카드의 자릿수 합산 = 소울카드
+    // ──────────────────────────────────────────
+    const MASTER_NUMS = new Set([11, 22, 33]);
+
+    function digitSum(n) {
+      return String(n).split('').reduce((a, c) => a + parseInt(c), 0);
+    }
+
+    function reduceToPersonality(sum) {
+      // 마스터 넘버(11, 22, 33) 또는 22 이하가 될 때까지 자릿수 합산
+      while (sum > 22 && !MASTER_NUMS.has(sum)) {
+        sum = digitSum(sum);
+      }
+      return sum;
+    }
+
+    function calculate() {
+      const input = document.getElementById('birthdate').value;
+      if (!input) return;
+
+      const [yyyy, mm, dd] = input.split('-').map(Number);
+
+      // 1단계: 월 + 일 + 연도 합산
+      const rawSum = mm + dd + yyyy;
+
+      // 2단계: 퍼스낼리티 카드 도출 (마스터 넘버 포함)
+      const pNum = reduceToPersonality(rawSum);
+
+      // 3단계: 소울카드 = 퍼스낼리티 카드의 자릿수 합산
+      //   33 → 3+3=6, 22 → 4, 11 → 2, 단자릿수 → 자기 자신
+      const sNum = (pNum < 10) ? pNum : digitSum(pNum);
+
+      // 특수: 19 → 10(운명의 수레바퀴) → 1(마법사) : 3개 카드
+      const isTriple = (pNum === 19);
+
+      // ── 계산 과정 트레일 ──
+      const trailEl = document.getElementById('calc-trail');
+      trailEl.innerHTML = '';
+      const trailSteps = [`${mm} + ${dd} + ${yyyy}`, String(rawSum)];
+      if (rawSum !== pNum) trailSteps.push(String(pNum));
+
+      trailSteps.forEach((chip, i) => {
+        if (i > 0) {
+          const arrow = document.createElement('span');
+          arrow.className = 'trail-arrow'; arrow.textContent = '→';
+          trailEl.appendChild(arrow);
+        }
+        const chipEl = document.createElement('span');
+        chipEl.className = 'trail-chip'; chipEl.textContent = chip;
+        trailEl.appendChild(chipEl);
+      });
+      // 최종 퍼스낼리티 숫자 강조
+      const fa = document.createElement('span');
+      fa.className = 'trail-arrow'; fa.textContent = '→'; trailEl.appendChild(fa);
+      const fc = document.createElement('span');
+      fc.className = 'trail-chip final'; fc.textContent = pNum; trailEl.appendChild(fc);
+
+      // ── 퍼스낼리티 카드 UI ──
+      const pCard = ARCANA[pNum];
+      document.getElementById('number-badge').textContent = pNum;
+      document.getElementById('arcana-name').textContent = pCard.name;
+      document.getElementById('arcana-roman').textContent = pCard.roman + ' · Major Arcana';
+      document.getElementById('interpretation').textContent = pCard.text;
+      document.getElementById('keywords').innerHTML =
+        pCard.keywords.map(k => `<span class="kw-chip">${k}</span>`).join('');
+
+      // ── 마스터 넘버 배지 (퍼스낼리티 카드가 11 또는 22) ──
+      const masterBadge = document.getElementById('master-badge');
+      const masterDesc = document.getElementById('master-desc');
+      const mn = MASTER_NUMBERS[pNum];
+      if (mn) {
+        masterBadge.textContent = `✶ 마스터 넘버 ${pNum}`;
+        masterBadge.classList.remove('hidden');
+        masterDesc.textContent = mn.bannerDesc;
+        masterDesc.classList.remove('hidden');
+      } else {
+        masterBadge.classList.add('hidden');
+        masterDesc.classList.add('hidden');
+      }
+
+      // ── 소울카드 UI ──
+      const soulSection = document.getElementById('soul-section');
+      const tripleNotice = document.getElementById('triple-notice');
+      const soulMasterNotice = document.getElementById('soul-master-notice');
+      const soulMasterText = document.getElementById('soul-master-text');
+
+      if (pNum === sNum) {
+        soulSection.classList.add('hidden');
+      } else {
+        soulSection.classList.remove('hidden');
+        const sCard = ARCANA[sNum];
+        document.getElementById('soul-badge').textContent = sNum;
+        document.getElementById('soul-name').textContent = sCard.name;
+        document.getElementById('soul-roman').textContent = sCard.roman;
+        document.getElementById('soul-text').textContent = sCard.text;
+        document.getElementById('soul-keywords').innerHTML =
+          sCard.keywords.map(k => `<span class="kw-chip">${k}</span>`).join('');
+
+        // 퍼스낼리티가 마스터 넘버일 때 소울카드 섹션에 추가 안내
+        if (mn) {
+          soulMasterText.textContent = mn.soulDesc;
+          soulMasterNotice.classList.remove('hidden');
+        } else {
+          soulMasterNotice.classList.add('hidden');
+        }
+
+        if (isTriple) {
+          tripleNotice.classList.remove('hidden');
+        } else {
+          tripleNotice.classList.add('hidden');
+        }
+      }
+
+      // ── 결과 카드 표시 ──
+      const rc = document.getElementById('result-card');
+      rc.classList.remove('hidden');
+      rc.style.animation = 'none';
+      rc.offsetHeight;
+      rc.style.animation = '';
+      rc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetAll() {
+      document.getElementById('result-card').classList.add('hidden');
+      document.getElementById('birthdate').value = '';
+      document.getElementById('calc-btn').disabled = true;
+    }
+
+    // ── 마스터 넘버 데이터 (11, 22) ──
+    const MASTER_NUMBERS = {
+      11: {
+        bannerDesc: '마스터 넘버 11은 환원되지 않는 특별한 수입니다. '
+          + '당신은 예민한 직관과 영적 감수성을 타고난 영혼입니다. '
+          + '이상과 현실, 빛과 그림자를 동시에 꿰뚫어 보는 통로로서 이 세상에 왔습니다.',
+        soulDesc: '퍼스낼리티 카드 11은 마스터 넘버입니다. 소울카드 2번(고위여사제)에는 '
+          + '신비로운 직관의 깊이와 영적 통찰이 배가됩니다. '
+          + '당신의 소울은 지상의 지혜를 넘어선 곳에서 왔으며, '
+          + '내면의 목소리를 신뢰하는 것이 이 영혼의 가장 큰 사명입니다.'
+      },
+      22: {
+        bannerDesc: '마스터 넘버 22는 "마스터 빌더"라 불리는 가장 강력한 수입니다. '
+          + '당신은 세상에 새로운 구조를 세우고 지속적인 흔적을 남길 능력을 타고났습니다. '
+          + '원대한 꿈을 현실로 구현하는 건설자입니다.',
+        soulDesc: '퍼스낼리티 카드 22는 마스터 넘버입니다. 소울카드 4번(황제)에는 '
+          + '마스터 빌더의 실용적이고 강인한 에너지가 더해집니다. '
+          + '당신의 소울은 우주적 비전을 지상에 구현하기 위해 여기 있습니다. '
+          + '집중력과 인내로 나아갈 때 불가능해 보이는 꿈도 현실이 됩니다.'
+      },
+      33: {
+        bannerDesc: '마스터 넘버 33은 "마스터 티처"라 불리는 최고의 수입니다. '
+          + '11의 영적 직관과 22의 건설적 힘을 겸비한 당신은 '
+          + '사랑과 연민으로 인류를 치유하고 이끌기 위해 태어난 영혼입니다.',
+        soulDesc: '퍼스낼리티 카드 33은 최고의 마스터 넘버입니다. 소울카드 6번(연인)에는 '
+          + '마스터 티처의 무한한 사랑과 치유의 에너지가 더해집니다. '
+          + '당신의 소울은 관계와 연결을 통해 세상을 치유하고, '
+          + '사랑을 나누는 것에서 가장 큰 성장을 경험하는 영혼입니다.'
+      }
+    };
+
+    // ── Major Arcana + 마스터 너버 33 데이터 ──
+    const ARCANA = {
+      33: {
+        name: 'Master Teacher', roman: '33', keywords: ['연민', '치유', '무조건적 사랑', '영적 지도'],
+        text: '당신은 종교적 경계를 넘어, 사랑으로 이 세상을 치유하기 위해 태어난 영혼입니다. '
+          + '당신을 포함한 모든 존재에 대한 끊임없는 연민이 '
+          + '가장 큰 성장의 원동력입니다. '
+          + '가르치고 수호하고 압도적인 사랑으로 세상에 빛을 전할 때, '
+          + '당신의 영혼은 바로 최고의 파동에 상승합니다.'
+      },
+      1: {
+        name: 'The Magician', roman: 'I', keywords: ['의지력', '현현', '기술', '주도성'],
+        text: '당신은 타고난 현현자입니다. 우주는 생각을 현실로 바꾸는 힘을 당신에게 선물했습니다. 성장의 열쇠는 집중력과 의도를 갈고닦는 데 있습니다. 필요한 모든 도구는 이미 당신의 손 안에 있습니다.'
+      },
+      2: {
+        name: 'The High Priestess', roman: 'II', keywords: ['직관', '신비', '인내', '내면의 앎'],
+        text: '직관이 당신의 가장 위대한 나침반입니다. 세상의 소음보다 조용한 내면의 목소리를 신뢰할 때 진정한 성장이 찾아옵니다. 고요함은 분석이 결코 보여주지 못하는 것을 드러냅니다.'
+      },
+      3: {
+        name: 'The Empress', roman: 'III', keywords: ['창의성', '풍요', '넉넉함', '돌봄'],
+        text: '풍요는 당신의 타고난 권리입니다. 자연, 관계, 창조적 활동을 돌보는 과정에서 성장이 피어납니다. 베푸는 만큼 받아들이는 것도 허락하세요.'
+      },
+      4: {
+        name: 'The Emperor', roman: 'IV', keywords: ['권위', '구조', '안정', '리더십'],
+        text: '구조는 감옥이 아니라 당신이 이끄는 왕좌입니다. 성장의 길은 지속되는 기반을 쌓고, 책임을 받아들이며, 지혜롭게 야망을 이끄는 데 있습니다.'
+      },
+      5: {
+        name: 'The Hierophant', roman: 'V', keywords: ['전통', '안내', '믿음', '공동체'],
+        text: '당신은 더 깊은 의미를 추구하는 구도자입니다. 전통, 스승의 가르침, 영적 탐구를 통해 성장이 펼쳐집니다. 세대를 거쳐 전해 내려온 지혜 속에 당신이 찾던 열쇠가 있습니다.'
+      },
+      6: {
+        name: 'The Lovers', roman: 'VI', keywords: ['관계', '일치', '선택', '조화'],
+        text: '영혼은 연결과 선택을 통해 성장합니다. 관계는 당신의 가장 위대한 스승입니다. 순간적인 욕망이 아닌 가장 깊은 가치에 맞게 결정을 내릴 때 진정한 성장이 찾아옵니다.'
+      },
+      7: {
+        name: 'The Chariot', roman: 'VII', keywords: ['결단력', '통제', '승리', '집중'],
+        text: '승리는 내면의 모순을 다스리는 자에게 찾아옵니다. 대립하는 힘을 앞으로 나아가는 추진력으로 전환할 때 성장합니다. 규율과 결단이 바로 당신의 전차입니다.'
+      },
+      8: {
+        name: 'Strength', roman: 'VIII', keywords: ['용기', '인내', '연민', '내면의 힘'],
+        text: '부드러운 끈기가 거친 힘을 이깁니다. 성장 카드는 연민과 조용한 용기가 공격성보다 강하다는 것을 일깨워 줍니다. 두려움이 아닌 사랑으로 내면의 사자를 길들이세요.'
+      },
+      9: {
+        name: 'The Hermit', roman: 'IX', keywords: ['성찰', '지혜', '고독', '내면의 안내'],
+        text: '고독은 당신에게 신성한 시간입니다. 가장 깊은 성장은 조용한 성찰 속에서 자신만의 진실의 등불을 찾을 때 이루어집니다. 그 빛을 찾았다면 어둠 속을 걷는 이들과 나누세요.'
+      },
+      10: {
+        name: 'Wheel of Fortune', roman: 'X', keywords: ['변화', '순환', '행운', '운명'],
+        text: '변화는 유일한 상수이자 당신의 스승입니다. 삶의 순환을 평정심으로 받아들일 때 성장합니다. 오르는 것은 반드시 내려가고, 내려간 것은 반드시 다시 오릅니다.'
+      },
+      11: {
+        name: 'Justice', roman: 'XI', keywords: ['공정', '진실', '책임', '균형'],
+        text: '인과율이 당신의 길을 다스립니다. 성장은 성실함, 공정함, 책임감에 뿌리를 둡니다. 당신의 모든 선택은 생각보다 멀리 울려 퍼집니다. 맑은 눈으로 결정하세요.'
+      },
+      12: {
+        name: 'The Hanged Man', roman: 'XII', keywords: ['내려놓음', '관점', '멈춤', '희생'],
+        text: '내려놓음은 패배가 아니라 계시로 향하는 관문입니다. 통제를 내려놓고 시각을 전환하며 멈춤 속에서 은혜를 찾을 때 성장합니다. 기다림처럼 보이는 것이 사실은 변화입니다.'
+      },
+      13: {
+        name: 'Death', roman: 'XIII', keywords: ['변환', '끝맺음', '재생', '전환'],
+        text: '끝맺음은 신성한 새 시작입니다. 성장 숫자는 근본적인 변환을 요청합니다. 더 이상 도움이 되지 않는 것을 내려놓아야 운명이 들어올 공간이 열립니다. 변화는 당신의 가장 강력한 동반자입니다.'
+      },
+      14: {
+        name: 'Temperance', roman: 'XIV', keywords: ['균형', '절제', '연금술', '목적'],
+        text: '연금술이 당신 영혼 안에 살고 있습니다. 인내와 열정, 논리와 직관 같은 반대되는 것들을 아름다운 균형으로 조화시킬 때 성장합니다. 절제가 바로 당신의 초능력입니다.'
+      },
+      15: {
+        name: 'The Devil', roman: 'XV', keywords: ['그림자 작업', '자각', '해방', '정직'],
+        text: '해방이 당신을 부르고 있습니다. 성장의 길은 자신의 그림자를 솔직하게 마주하고 건강하지 않은 집착을 내려놓는 것을 요구합니다. 보이는 사슬은 대부분 스스로 풀 수 있는 것들입니다.'
+      },
+      16: {
+        name: 'The Tower', roman: 'XVI', keywords: ['격변', '계시', '돌파', '변화'],
+        text: '갑작스러운 각성이 당신의 세계를 재편합니다. 성장은 혼란 속에서 찾아옵니다. 환상의 탑이 무너져야 단단한 땅이 드러납니다. 붕괴 속에 있는 돌파구를 끌어안으세요.'
+      },
+      17: {
+        name: 'The Star', roman: 'XVII', keywords: ['희망', '재생', '영감', '평온'],
+        text: '희망이 당신의 초능력입니다. 어떤 폭풍이 지나간 후에도 재생과 빛나는 믿음을 되찾습니다. 성장은 우주의 계획을 신뢰하고 진정한 빛을 세상에 자유롭게 쏟아내는 것입니다.'
+      },
+      18: {
+        name: 'The Moon', roman: 'XVIII', keywords: ['환상', '직관', '꿈', '무의식'],
+        text: '무의식이 당신의 바다입니다. 가장 깊은 성장은 꿈, 상징, 정신의 어두운 깊이를 탐험하는 데서 옵니다. 두려움을 마주하세요. 두려움은 지혜로 가는 문입니다.'
+      },
+      19: {
+        name: 'The Sun', roman: 'XIX', keywords: ['기쁨', '성공', '활력', '명료함'],
+        text: '빛남, 기쁨, 활력이 당신의 길을 수놓습니다. 성장은 진정한 자기 표현의 외적 확장입니다. 사과 없이 빛날수록 주변 세계를 더욱 환하게 밝힙니다.'
+      },
+      20: {
+        name: 'Judgement', roman: 'XX', keywords: ['각성', '용서', '구원', '소명'],
+        text: '더 높은 부름이 당신을 기다립니다. 성장 카드는 각성을 이야기합니다. 가장 진정한 자신으로 부르는 나팔 소리를 들으세요. 과거를 용서하고 새롭게 일어나 영혼의 목적에 응답하세요.'
+      },
+      21: {
+        name: 'The World', roman: 'XXI', keywords: ['완성', '통합', '성취', '전체성'],
+        text: '완성의 에너지가 당신 안에 있습니다. 성장의 길은 전체성으로 이어집니다. 모든 경험을 하나의 지혜로운 자아로 통합하는 것입니다. 모든 끝맺음은 귀향입니다.'
+      },
+      22: {
+        name: 'The Fool', roman: '0 / XXII', keywords: ['새 시작', '자발성', '모험', '가능성'],
+        text: '순수한 가능성이 당신 마음속에 살고 있습니다. 당신은 우주적 초심자입니다. 신뢰와 경이로움으로 미지의 세계로 기꺼이 뛰어드는 용기를 지녔습니다. 두려움 없이 새 시작을 받아들일 때 가장 크게 성장합니다.'
+      }
+    };
+  </script>
+</body>
+
+</html>
