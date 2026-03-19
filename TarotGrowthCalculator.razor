@@ -369,25 +369,19 @@
 
         if (!birthdate.HasValue) return;
 
-        var d = birthdate.Value;
-        int month = d.Month;
-        int day   = d.Day;
-        int year  = d.Year;
+        // 날짜 숫자 추출 (YYYYMMDD 형식)
+        string digits = birthdate.Value.ToString("yyyyMMdd");
+        int sum = digits.Sum(c => c - '0');
+        trailChips.Add(digits);
+        trailChips.Add(sum.ToString());
 
-        // ── 각 구성 요소를 마스터 넘버(11, 22)를 보존하며 한 자리로 축약 ──
-        int mReduced = ReduceToArcana(month);
-        int dReduced = ReduceToArcana(day);
-        int yReduced = ReduceToArcana(year);
+        // 22 이하가 될 때까지 자릿수 합산 (단, 11/22/33 마스터넘버 보존)
+        sum = ReduceToArcana(sum);
 
-        // 트레일: 월 / 일 / 년 (축약값)
-        trailChips.Add($"월 {month}→{mReduced}");
-        trailChips.Add($"일 {day}→{dReduced}");
-        trailChips.Add($"년 {year}→{yReduced}");
-
-        // ── 세 값의 합을 다시 축약 ──
-        int total = mReduced + dReduced + yReduced;
-        trailChips.Add($"합계 {total}");
-        int sum = ReduceToArcana(total);
+        if (sum.ToString() != trailChips.Last())
+        {
+            trailChips.Add(sum.ToString());
+        }
 
         result = GetTarotResult(sum);
     }

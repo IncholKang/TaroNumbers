@@ -580,13 +580,10 @@
 
       const [yyyy, mm, dd] = input.split('-').map(Number);
 
-      // 1단계: 월, 일, 연도 각각 축약
-      const mReduced = reduceToPersonality(mm);
-      const dReduced = reduceToPersonality(dd);
-      const yReduced = reduceToPersonality(yyyy);
+      // 1단계: 월 + 일 + 연도 합산
+      const rawSum = mm + dd + yyyy;
 
       // 2단계: 퍼스낼리티 카드 도출 (마스터 넘버 포함)
-      const rawSum = mReduced + dReduced + yReduced;
       const pNum = reduceToPersonality(rawSum);
 
       // 3단계: 소울카드 = 퍼스낼리티 카드의 자릿수 합산
@@ -599,12 +596,7 @@
       // ── 계산 과정 트레일 ──
       const trailEl = document.getElementById('calc-trail');
       trailEl.innerHTML = '';
-      const trailSteps = [
-        `월 ${mm}→${mReduced}`,
-        `일 ${dd}→${dReduced}`,
-        `년 ${yyyy}→${yReduced}`,
-        `합계 ${rawSum}`
-      ];
+      const trailSteps = [`${mm} + ${dd} + ${yyyy}`, String(rawSum)];
       if (rawSum !== pNum) trailSteps.push(String(pNum));
 
       trailSteps.forEach((chip, i) => {
