@@ -578,10 +578,11 @@
       const input = document.getElementById('birthdate').value;
       if (!input) return;
 
-      const [yyyy, mm, dd] = input.split('-').map(Number);
-
-      // 1단계: 월 + 일 + 연도 합산
-      const rawSum = mm + dd + yyyy;
+      const [yyyyStr, mmStr, ddStr] = input.split('-');
+      
+      // 1단계: YYYYMMDD 8자리 문자열 변환 후 각 자릿수 합산
+      const yyyymmdd = yyyyStr + mmStr + ddStr;
+      const rawSum = digitSum(yyyymmdd);
 
       // 2단계: 퍼스낼리티 카드 도출 (마스터 넘버 포함)
       const pNum = reduceToPersonality(rawSum);
@@ -596,7 +597,7 @@
       // ── 계산 과정 트레일 ──
       const trailEl = document.getElementById('calc-trail');
       trailEl.innerHTML = '';
-      const trailSteps = [`${mm} + ${dd} + ${yyyy}`, String(rawSum)];
+      const trailSteps = [yyyymmdd.split('').join(' + '), String(rawSum)];
       if (rawSum !== pNum) trailSteps.push(String(pNum));
 
       trailSteps.forEach((chip, i) => {
