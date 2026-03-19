@@ -369,21 +369,43 @@
 
         if (!birthdate.HasValue) return;
 
-        // 날짜 숫자 추출 (YYYYMMDD 형식)
-        string digits = birthdate.Value.ToString("yyyyMMdd");
-        int sum = digits.Sum(c => c - '0');
-        trailChips.Add(digits);
-        trailChips.Add(sum.ToString());
+        var d = birthdate.Value;
+        int month = d.Month;
+        int day   = d.Day;
+        int year  = d.Year;
 
-        // 22 이하가 될 때까지 자릿수 합산
-        while (sum > 22)
-        {
-            int next = sum.ToString().Sum(c => c - '0');
-            trailChips.Add(next.ToString());
-            sum = next;
-        }
+        // ── 각 구성 요소를 마스터 넘버(11, 22)를 보존하며 한 자리로 축약 ──
+        int mReduced = ReduceToArcana(month);
+        int dReduced = ReduceToArcana(day);
+        int yReduced = ReduceToArcana(year);
+
+        // 트레일: 월 / 일 / 년 (축약값)
+        trailChips.Add($"월 {month}→{mReduced}");
+        trailChips.Add($"일 {day}→{dReduced}");
+        trailChips.Add($"년 {year}→{yReduced}");
+
+        // ── 세 값의 합을 다시 축약 ──
+        int total = mReduced + dReduced + yReduced;
+        trailChips.Add($"합계 {total}");
+        int sum = ReduceToArcana(total);
 
         result = GetTarotResult(sum);
+    }
+
+    /// <summary>
+    /// 수비학적 축약: 22 이하가 될 때까지 자릿수 합산.
+    /// 단, 11과 22(마스터 넘버)는 중간 단계에서 보존됩니다.
+    /// </summary>
+    private static int ReduceToArcana(int n)
+    {
+        while (n > 22)
+        {
+            int reduced = n.ToString().Sum(c => c - '0');
+            // 마스터 넘버(11·22)가 나오면 보존
+            if (reduced == 11 || reduced == 22) return reduced;
+            n = reduced;
+        }
+        return n;
     }
 
     private void Reset()
